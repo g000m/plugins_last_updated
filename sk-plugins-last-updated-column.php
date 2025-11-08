@@ -275,8 +275,8 @@ class SK_Plugins_Last_Updated_Column
         ?>
         <style type="text/css">
             @media screen and (max-width: 782px) {
-                #the-list .column-<?= $this->slugUpdated; ?>,
-                #the-list .column-<?= $this->slugUpgraded; ?> {
+                #the-list .column-<?= esc_attr($this->slugUpdated); ?>,
+                #the-list .column-<?= esc_attr($this->slugUpgraded); ?> {
                     display: block;
                     width: auto;
                 }
@@ -286,13 +286,13 @@ class SK_Plugins_Last_Updated_Column
                     display: inline;
                 }
 
-                tfoot .column-<?= $this->slugUpdated; ?>,
-                tfoot .column-<?= $this->slugUpgraded; ?> {
+                tfoot .column-<?= esc_attr($this->slugUpdated); ?>,
+                tfoot .column-<?= esc_attr($this->slugUpgraded); ?> {
                     display: none;
                 }
             }
 
-            .column-<?= $this->slugUpdated; ?> span {
+            .column-<?= esc_attr($this->slugUpdated); ?> span {
                 white-space: nowrap;
             }
 
@@ -385,7 +385,7 @@ class SK_Plugins_Last_Updated_Column
 
             global $wpdb;
 
-            $wpdb->query("DELETE FROM `" . $wpdb->options . "` WHERE `option_name` LIKE ('%" . $this->slugUpdated . "%')");
+            $wpdb->query($wpdb->prepare("DELETE FROM `" . $wpdb->options . "` WHERE `option_name` LIKE %s", '%' . $wpdb->esc_like($this->slugUpdated) . '%'));
 
             ?>
             <div class="updated">
