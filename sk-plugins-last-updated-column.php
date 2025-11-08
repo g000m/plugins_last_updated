@@ -16,8 +16,8 @@ if ( ! defined ( 'ABSPATH' ) ) {
 class SK_Plugins_Last_Updated_Column
 {
     public $cacheTime    = 86400;
-    public $slugUpdated  = "sk-plugin-last-updated ";
-    public $slugUpgraded = "sk-plugin-last-upgraded ";
+    public $slugUpdated  = "sk-plugin-last-updated";
+    public $slugUpgraded = "sk-plugin-last-upgraded";
     public $slugSettings = "plugins-last-updated-settings";
     public $currentDateTime = false;
 
