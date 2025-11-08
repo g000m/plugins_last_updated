@@ -238,9 +238,9 @@ class SK_Plugins_Last_Updated_Column
             $retval = false;
             $errmsg = $call_api->get_error_message();
 
-            if ( $errmsg == 'closed' ) { 
+            if ( $errmsg === 'closed' ) { 
                 $retval = -2;
-            } elseif ( $errmsg == 'Plugin not found.' ) {
+            } elseif ( $errmsg === 'Plugin not found.' ) {
                 $retval = -3;
             }
 
@@ -369,7 +369,7 @@ class SK_Plugins_Last_Updated_Column
         if (
             isset($screen) and
             $screen->base === ("plugins_page_" . $this->slugSettings) and
-            isset($_REQUEST['clear-cache']) and $_REQUEST['clear-cache'] == "true"
+            isset($_REQUEST['clear-cache']) and $_REQUEST['clear-cache'] === "true"
         ) {
             // Verify nonce
             if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'clear_plugin_cache')) {
