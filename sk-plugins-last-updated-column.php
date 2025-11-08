@@ -201,65 +201,65 @@ class SK_Plugins_Last_Updated_Column
             return $retval;
         }
 
-            include_once ( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+        include_once ( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 
-            $call_api = @plugins_api (
-                    'plugin_information',
-                    array (
-                            'slug'   => $pluginSlug,
-                            'fields' => array ( 'last_updated' )
-                    )
-            );
+        $call_api = plugins_api (
+                'plugin_information',
+                array (
+                        'slug'   => $pluginSlug,
+                        'fields' => array ( 'last_updated' )
+                )
+        );
 
-            /** Check for Errors & Display the results */
-            if ( is_wp_error ( $call_api ) ) {
+        /** Check for Errors & Display the results */
+        if ( is_wp_error ( $call_api ) ) {
 
-                /*
-                 * plugin_api() doesn't differentiate between a network issue and a successful
-                 * API request that returns json that contains a key of "error". Examples:
-                 * {"error":"Plugin not found."}
-                 * 
-                   {
-                    "error": "closed",
-                    "name": "Easy Testimonials",
-                    "slug": "easy-testimonials",
-                    "description": "This plugin has been closed as of July 19, 2024 and is not available for download. Reason: Security Issue.",
-                    "closed": true,
-                    "closed_date": "2024-07-19",
-                    "reason": "security-issue",
-                    "reason_text": "Security Issue"
-                  }
+            /*
+             * plugin_api() doesn't differentiate between a network issue and a successful
+             * API request that returns json that contains a key of "error". Examples:
+             * {"error":"Plugin not found."}
+             * 
+               {
+                "error": "closed",
+                "name": "Easy Testimonials",
+                "slug": "easy-testimonials",
+                "description": "This plugin has been closed as of July 19, 2024 and is not available for download. Reason: Security Issue.",
+                "closed": true,
+                "closed_date": "2024-07-19",
+                "reason": "security-issue",
+                "reason_text": "Security Issue"
+              }
 
-                 * Unfortunately, plugin_api() also doesn't pass the returned json into WP_Error,
-                 * so we can't get the "reason" or "closed_date". Best we can do is check the
-                 * error message and go from there.
-                 */
+             * Unfortunately, plugin_api() also doesn't pass the returned json into WP_Error,
+             * so we can't get the "reason" or "closed_date". Best we can do is check the
+             * error message and go from there.
+             */
 
-                $retval = false;
-                $errmsg = $call_api->get_error_message();
+            $retval = false;
+            $errmsg = $call_api->get_error_message();
 
-                if ( $errmsg == 'closed' ) { 
-                    $retval = -2;
-                } elseif ( $errmsg == 'Plugin not found.' ) {
-                    $retval = -3;
-                }
-
-                if ( $retval !== false ) {
-                    set_transient ( $this->slugUpdated . $pluginSlug, $retval, $this->cacheTime );
-                }
-
-                return $retval;
-            } else {
-                if ( ! empty( $call_api->last_updated ) ) {
-                    set_transient ( $this->slugUpdated . $pluginSlug, $call_api->last_updated,
-                            $this->cacheTime );
-
-                    return $call_api->last_updated;
-                } else {
-
-                    return false;
-                }
+            if ( $errmsg == 'closed' ) { 
+                $retval = -2;
+            } elseif ( $errmsg == 'Plugin not found.' ) {
+                $retval = -3;
             }
+
+            if ( $retval !== false ) {
+                set_transient ( $this->slugUpdated . $pluginSlug, $retval, $this->cacheTime );
+            }
+
+            return $retval;
+        } else {
+            if ( ! empty( $call_api->last_updated ) ) {
+                set_transient ( $this->slugUpdated . $pluginSlug, $call_api->last_updated,
+                        $this->cacheTime );
+
+                return $call_api->last_updated;
+            } else {
+
+                return false;
+            }
+        }
     }
 
     function columnHeading ( $columns )
